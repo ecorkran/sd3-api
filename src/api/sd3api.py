@@ -1,3 +1,4 @@
+import base64
 import os
 import requests
 from dotenv import load_dotenv
@@ -8,12 +9,10 @@ class SD3API:
         self.apiKey = apiKey
         self.baseUrl = "https://api.stability.ai/v2beta/stable-image/generate/sd3"
 
-    def generateImage(self, prompt, negative=None, ratio='16:9', imageFormat='jpeg'):
+    def generateImage(self, prompt, negative=None, ratio='16:9', imageFormat='png'):
         headers = {
             'authorization': f'Bearer {self.apiKey}',
-            'accept': 'image/*',
-#            'content-type': 'multipart/form-data',
-#            'output_format': imageFormat,
+            'accept': 'application/json',
         }
         files = {
             'none': '',
@@ -23,17 +22,20 @@ class SD3API:
             "negative_prompt": negative,
             "aspect_ratio": ratio,
             "seed": 0,
-            "output_format": 'jpeg',
+            "output_format": imageFormat,
         }
 
-        # todo: just return the image here?  or allow save to file as well.  ideally both because we might
-        # todo: want to display it not just save.
-        response = requests.post(self.baseUrl, headers=headers, files=files, data=payload)
-        if response.status_code == 200:
-            with open("./dog-wearing-glasses.jpeg", 'wb') as file:
-                file.write(response.content)
+        try:
+            response = requests.post(self.baseUrl, headers=headers, files=files, data=payload)
+            if response.status_code == 200:
+                json = response.json()
+                return response.status_code, json['seed'], base64.b64decode(json['image']),
 
-        return response.json()
+            return response.status_code, 0, None
+
+        except requests.exceptions.RequestException as e:
+            print(e)
+            return 500, 0, e.response
 
 
 # Example usage
