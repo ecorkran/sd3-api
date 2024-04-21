@@ -9,7 +9,7 @@ class SD3API:
         self.apiKey = apiKey
         self.baseUrl = "https://api.stability.ai/v2beta/stable-image/generate/sd3"
 
-    def generateImage(self, prompt, negative=None, ratio='16:9', imageFormat='png', seed=0):
+    def generateImage(self, prompt, negative=None, ratio='16:9', imageFormat='png', seed=0, model='sd3'):
         headers = {
             'authorization': f'Bearer {self.apiKey}',
             'accept': 'application/json',
@@ -22,6 +22,7 @@ class SD3API:
             "negative_prompt": negative,
             "aspect_ratio": ratio,
             "seed": seed,
+            "model": model,
             "output_format": imageFormat,
         }
 

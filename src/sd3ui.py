@@ -50,16 +50,10 @@ class SD3UI:
 
         return file_path
 
-    @staticmethod
-    def convertBytesToImage(byte_data):
-        image_stream = io.BytesIO(byte_data)
-        image = Image.open(image_stream)
-        return image
-
     # Generate an image and save it to a (mostly) non-conflicting filename.
     def generateImage(self, prompt="masterpiece, a large banana floating in space",
-                      negative=None, ratio='16:9', imageFormat='png', seed=0):
-        status, seed, image = self.api.generateImage(prompt=prompt, negative=negative, ratio=ratio, imageFormat=imageFormat, seed=seed)
+                      negative=None, ratio='16:9', imageFormat='png', model='sd3', seed=0):
+        status, seed, image = self.api.generateImage(prompt=prompt, negative=negative, ratio=ratio, imageFormat=imageFormat, model=model, seed=seed)
 
         if status == 200:
             filePath = self.generateFileName(self.baseName, self.dateFormat, self.outputTxt2ImgPath, self.imageFormat)
@@ -70,9 +64,15 @@ class SD3UI:
             return SD3UI.convertBytesToImage(image), seed
 
         else:
-            logger.error(f"Failed to generate image.  Status: {status}, content: {image}")
+            logger.error(f'Failed to generate image.  Status: {status}, content: {image}')
 
         return image, seed
+
+    @staticmethod
+    def convertBytesToImage(byte_data):
+        image_stream = io.BytesIO(byte_data)
+        image = Image.open(image_stream)
+        return image
 
 
 def main():

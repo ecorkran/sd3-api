@@ -9,8 +9,9 @@ class HomePage:
         inputComponents = [
             gr.Textbox(label="Prompt"),
             gr.Textbox(label="Negative Prompt"),
-            gr.Dropdown(choices=['16:9', '4:3', '1:1'], label="Aspect Ratio", value="16:9"),
+            gr.Dropdown(choices=['21:9', '16:9', '5:4', '3:2', '1:1', '2:3', '4:5', '9:16', '9:21' ], label="Aspect Ratio", value="16:9"),
             gr.Radio(choices=['png', 'jpg'], label="Image Format", value="png"),
+            gr.Radio(choices=['sd3', 'sd3-turbo'], label="Model", value="sd3"),
             gr.Textbox(label="Seed", value="0"),
         ]
 
