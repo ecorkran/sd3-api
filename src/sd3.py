@@ -81,7 +81,8 @@ class SD3:
         self.api = SD3API(apiKey=os.getenv('API_KEY_STABILITY'))
 
     # Function to generate a non-conflicting filename with a base, date, and incrementing index.
-    def generateFileName(self, baseName, dateFormat, outputPath, fileExtension):
+    @staticmethod
+    def generateFileName(baseName, dateFormat, outputPath, fileExtension):
 
         # Get the current time and format it as a string.
         date_str = datetime.now().strftime(dateFormat)
